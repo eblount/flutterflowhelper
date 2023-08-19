@@ -1,10 +1,10 @@
-# flutterflowhelper
+# FlutterFlow Helper
 
-A new Flutter project.
+This project allows you to paste in a page and its model from FlutterFlow, and it will create a working Flutter page widget from them.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Clone the repo and `flutter run` or build it for your platform (i.e. `flutter build windows`).
 
 A few resources to get you started if this is your first Flutter project:
 
