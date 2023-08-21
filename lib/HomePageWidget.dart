@@ -30,34 +30,34 @@ class HomePageWidgetTheme {
 class _HomePageWidgetState extends State<HomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController? textController1;
-  TextEditingController? textController2;
-  TextEditingController? textController3;
-  TextEditingController? textController4;
+  TextEditingController? textControllerInputCode;
+  TextEditingController? textControllerInputModel;
+  TextEditingController? textControllerOutputClassname;
+  TextEditingController? textControllerOutputCode;
 
   String builtCode = '';
 
   @override
   void initState() {
     super.initState();
-    textController1 ??= TextEditingController();
-    textController2 ??= TextEditingController();
-    textController3 ??= TextEditingController();
-    textController4 ??= TextEditingController();
+    textControllerInputCode ??= TextEditingController();
+    textControllerInputModel ??= TextEditingController();
+    textControllerOutputClassname ??= TextEditingController();
+    textControllerOutputCode ??= TextEditingController();
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
-    textController3?.dispose();
-    textController4?.dispose();
+    textControllerInputCode?.dispose();
+    textControllerInputModel?.dispose();
+    textControllerOutputClassname?.dispose();
+    textControllerOutputCode?.dispose();
     super.dispose();
   }
 
   void convertCode() {
-    final inputCode = textController1?.text ?? '';
-    final inputModel = textController2?.text ?? '';
+    final inputCode = textControllerInputCode?.text ?? '';
+    final inputModel = textControllerInputModel?.text ?? '';
     var className = '';
 
     if (inputCode.isEmpty) {
@@ -66,8 +66,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
     var converted = CodeConverter().convertCode(inputCode, inputModel);
 
-    textController3?.text = converted.className;
-    textController4?.text = converted.widgetCode;
+    textControllerOutputClassname?.text = converted.className;
+    textControllerOutputCode?.text = converted.widgetCode;
   }
 
   @override
@@ -87,7 +87,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   fontSize: 22,
                 ),
           ),
-          actions: [],
+          actions: const [],
           centerTitle: false,
           elevation: 2,
         ),
@@ -97,7 +97,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -108,11 +108,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Container(
                       width: MediaQuery.sizeOf(context).width * 0.5,
                       height: (MediaQuery.sizeOf(context).height * 0.5) - 100,
-                      decoration: BoxDecoration(),
+                      decoration: const BoxDecoration(),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                         child: TextFormField(
-                          controller: textController1,
+                          controller: textControllerInputCode,
                           autofocus: true,
                           obscureText: false,
                           expands: true,
@@ -160,7 +160,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                       child: Text(
                         'Input Model',
                         style: HomePageWidgetTheme.of(context).bodyMedium,
@@ -169,11 +169,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Container(
                       width: MediaQuery.sizeOf(context).width * 0.5,
                       height: (MediaQuery.sizeOf(context).height * 0.5) - 100,
-                      decoration: BoxDecoration(),
+                      decoration: const BoxDecoration(),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                         child: TextFormField(
-                          controller: textController2,
+                          controller: textControllerInputModel,
                           autofocus: true,
                           obscureText: false,
                           expands: true,
@@ -224,14 +224,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                           child: Text(
                             'Class Filename',
                             style: HomePageWidgetTheme.of(context).bodyMedium,
@@ -239,13 +239,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         ),
                         // Copy button
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(30, 10, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(30, 10, 0, 0),
                           child: IconButton(
                             icon: const Icon(Icons.copy),
                             tooltip: 'Copy to Clipboard',
                             onPressed: () {
                               Clipboard.setData(ClipboardData(
-                                  text: textController3?.text ?? ''));
+                                  text: textControllerOutputClassname?.text ??
+                                      ''));
                             },
                           ),
                         ),
@@ -253,11 +254,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
                     Container(
                       width: MediaQuery.sizeOf(context).width * 0.5,
-                      decoration: BoxDecoration(),
+                      decoration: const BoxDecoration(),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                         child: TextFormField(
-                          controller: textController3,
+                          controller: textControllerOutputClassname,
                           autofocus: true,
                           readOnly: true,
                           obscureText: false,
@@ -303,7 +304,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                           child: Text(
                             'Converted Code',
                             style: HomePageWidgetTheme.of(context).bodyMedium,
@@ -311,13 +312,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         ),
                         // Copy button
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(30, 10, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(30, 10, 0, 0),
                           child: IconButton(
                             icon: const Icon(Icons.copy),
                             tooltip: 'Copy to Clipboard',
                             onPressed: () {
                               Clipboard.setData(ClipboardData(
-                                  text: textController4?.text ?? ''));
+                                  text: textControllerOutputCode?.text ?? ''));
                             },
                           ),
                         ),
@@ -326,11 +327,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Container(
                       width: MediaQuery.sizeOf(context).width * 0.5,
                       height: MediaQuery.sizeOf(context).height - 220,
-                      decoration: BoxDecoration(),
+                      decoration: const BoxDecoration(),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                         child: TextFormField(
-                          controller: textController4,
+                          controller: textControllerOutputCode,
                           autofocus: true,
                           readOnly: true,
                           obscureText: false,
