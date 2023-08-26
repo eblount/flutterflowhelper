@@ -13,6 +13,8 @@ class CodeConverter {
     var modelName = '';
     var addModelLinesNext = false;
     var inDispose = false;
+    var inButton = false;
+    var inSkipUntilClose = false;
 
     var modelInfo = parseModel(modelCode);
     modelName = modelInfo['name'];
@@ -20,6 +22,7 @@ class CodeConverter {
     var removeLines = [
       "import '/flutter_flow/flutter_flow_util.dart';",
       "import '/flutter_flow/flutter_flow_theme.dart';",
+      "import '/flutter_flow/flutter_flow_widgets.dart';",
       "import 'package:google_fonts/google_fonts.dart';",
       "import 'package:provider/provider.dart';",
       "import 'home_page_model.dart';",
@@ -46,7 +49,9 @@ class CodeConverter {
         continue;
       }
 
-      if (line.contains('Validator') || line.contains('unfocusNode')) {
+      if (line.contains('Validator') ||
+          line.contains('validator:') ||
+          line.contains('unfocusNode')) {
         continue;
       }
 
@@ -61,6 +66,52 @@ class CodeConverter {
       line = line.replaceFirst('_model.', '');
       line = line.replaceFirst('FlutterFlowTheme', "${className}Theme");
       line = line.replaceFirst('.override', "?.copyWith");
+
+      if (inSkipUntilClose) {
+        if (line.contains('),')) {
+          inSkipUntilClose = false;
+        }
+        continue;
+      }
+
+      if (line.contains('_model') && line.contains('setState')) {
+        inSkipUntilClose = true;
+        line = '},';
+      }
+
+      if (line.contains('borderRadius:') || line.contains('borderSide:')) {
+        if (!line.contains('),')) inSkipUntilClose = true;
+        continue;
+      }
+
+      // Fix the buttons
+      if (line.contains('FFButtonWidget')) {
+        inButton = true;
+        line = line.replaceFirst('FFButtonWidget', 'ElevatedButton');
+      }
+
+      if (inButton) {
+        if (line.contains('height:')) {
+          continue;
+        }
+        if (line.contains('iconPadding:')) {
+          inSkipUntilClose = true;
+          continue;
+        }
+        if (line.contains('text:')) {
+          line = line.replaceFirst('text:', 'child: Text(') + '),';
+        }
+        if (line.contains('options: FFButtonOptions')) {
+          line = line.replaceFirst(
+              'options: FFButtonOptions', 'style: ElevatedButton.styleFrom');
+        }
+        if (line.contains('color:')) {
+          line = line.replaceFirst('color:', 'backgroundColor:');
+        }
+        if (line.trim() == '),') {
+          inButton = false;
+        }
+      }
 
       outputLines.add(line);
 
@@ -166,10 +217,15 @@ class ${className}Theme {
 
   Color get primary => Theme.of(context).colorScheme.primary;
   Color get primaryBackground => Theme.of(context).colorScheme.background;
+  Color get secondaryBackground => Theme.of(context).colorScheme.surface;
+  Color get secondaryText => Theme.of(context).colorScheme.onSurface;
   TextStyle? get headlineMedium => Theme.of(context).textTheme.headlineMedium;
   TextStyle? get bodyMedium => Theme.of(context).textTheme.bodyMedium;
+  TextStyle? get titleLarge => Theme.of(context).textTheme.titleLarge;
   TextStyle? get labelMedium => Theme.of(context).textTheme.labelMedium;
+  TextStyle? get titleSmall => Theme.of(context).textTheme.titleSmall;
   Color get alternate => Theme.of(context).colorScheme.secondary;
+  Color get info => Theme.of(context).colorScheme.secondary;
   Color get error => Theme.of(context).colorScheme.error;
 }
 ''';
